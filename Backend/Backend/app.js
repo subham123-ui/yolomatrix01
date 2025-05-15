@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
 import { configurePassport } from "./Config/passport.config.js";
@@ -15,7 +14,8 @@ configurePassport();
 
 // Middleware
 app.use(express.json());
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+// app.use(cookieParser());
 
 // CORS configuration
 const corsOptions = {

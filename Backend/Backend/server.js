@@ -19,13 +19,13 @@ const PORT = process.env.PORT || 4000;  // Set default port if not specified
 
 
 //! ===================================================
-//? { Middleware Initialize }
-app.use(
-  cors({})
-);
+app.use(cors({
+  origin: process.env.FRONTEND_URL, // Allow only this origin
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
 //! ===================================================
 
 
