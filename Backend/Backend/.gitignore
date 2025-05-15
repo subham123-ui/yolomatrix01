@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Coverage
+coverage/
+
+# Optional npm cache directory
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# Local MongoDB database files (if any)
+*.local.db
+*.sourcemap
+
+# Uploaded files (if using local upload during dev)
+uploads/

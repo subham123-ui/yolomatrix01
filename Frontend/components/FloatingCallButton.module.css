@@ -1,0 +1,82 @@
+.floatingButtonContainer {
+  position: fixed;
+  z-index: 1000;
+}
+
+/* Positioning variations */
+.bottom-right {
+  bottom: 30px;
+  right: 30px;
+}
+
+.bottom-left {
+  bottom: 30px;
+  left: 30px;
+}
+
+.top-right {
+  top: 30px;
+  right: 30px;
+}
+
+.top-left {
+  top: 30px;
+  left: 30px;
+}
+
+.floatingButton {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.floatingButton:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.floatingButton:active {
+  transform: scale(0.95);
+}
+
+.floatingButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.callStatus {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
