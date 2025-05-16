@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import Logo from "@/components/logo"
 import { useToast } from "@/components/ui/use-toast"
-import { authAPI } from "@/lib/api-client"
+import authAPI from "@/lib/auth-api"
 
 const handleSocialLogin = (provider) => {
   if (provider === "google") {
@@ -40,20 +40,20 @@ export default function LoginPage() {
     setIsLoading(true)
     
     try {
-      const { data } = await authAPI.login({ email, password })
+      const response = await authAPI.login({ email, password })
       
       // Handle successful login
-      if (data.token) {
+      if (response?.data?.token) {
         // Store token in localStorage or secure storage
         if (rememberMe) {
-          localStorage.setItem("authToken", data.token)
+          localStorage.setItem("token", response.data.token)
         } else {
-          sessionStorage.setItem("authToken", data.token)
+          sessionStorage.setItem("token", response.data.token)
         }
         
         // Store user info if provided
-        if (data.user) {
-          localStorage.setItem("user", JSON.stringify(data.user))
+        if (response.data.user) {
+          localStorage.setItem("user", JSON.stringify(response.data.user))
         }
         
         toast({
@@ -64,10 +64,15 @@ export default function LoginPage() {
         
         // Redirect to dashboard or home page
         router.push("/dashboard")
+      } else {
+        setError("Login failed. Please check your credentials and try again.")
       }
     } catch (err) {
-      console.error("Login error:", err)
-      setError(err.response?.data?.message || "Failed to login. Please check your credentials and try again.")
+      console.error("Login error:", {
+        message: err.message,
+        stack: err.stack
+      });
+      setError(err.message || "Failed to login. Please check your credentials and try again.")
     } finally {
       setIsLoading(false)
     }
@@ -88,7 +93,7 @@ export default function LoginPage() {
           className="flex items-center text-gray-600 dark:text-gray-400"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          {t("common.back")}
+          {t("")}
         </Button>
       </header>
       
@@ -248,7 +253,7 @@ export default function LoginPage() {
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
               {t("login.noAccount")}{" "}
               <Link href="/signup" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-                {t("login.signUp")}
+                {t("Signup Page")}
               </Link>
             </p>
           </div>

@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import Logo from "@/components/logo"
 import { useRouter } from "next/navigation"
-import { authAPI } from "@/lib/api-client"
+import authAPI from "@/lib/auth-api"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -70,31 +70,26 @@ export default function SignupPage() {
       console.log("Sending registration request with data:", apiData);
 
       // Use the authAPI client instead of direct fetch
-      const { data } = await authAPI.register(apiData);
+      const response = await authAPI.register(apiData);
       
-      console.log("Success response:", data);
+      console.log("Success response:", response);
       
       // Successful registration
-      if (data.token) {
-        localStorage.setItem("authToken", data.token);
+      if (response?.data?.token) {
+        localStorage.setItem("token", response.data.token);
         router.push("/dashboard"); // Redirect to dashboard if token is provided
       } else {
+        console.log("No token in response, redirecting to login");
         router.push("/login"); // Redirect to login if no token
       }
       
     } catch (err) {
       console.error("Registration error:", err);
-      
-      // Handle different types of errors
-      if (err.message === 'Network error. Please check your connection and try again.') {
-        setError("Cannot connect to the server. Please check your internet connection and try again.");
-      } else if (err.message === 'Request timeout. Please try again.') {
-        setError("The request took too long to complete. Please try again.");
-      } else if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("An unexpected error occurred. Please try again later.");
-      }
+      setError(
+        err?.response?.data?.message ||
+        err?.message ||
+        "An unexpected error occurred. Please try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -337,7 +332,7 @@ export default function SignupPage() {
                 href="/login"
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
               >
-                {t("signup.signIn")}
+                {t("Login Page")}
               </Link>
             </p>
           </div>

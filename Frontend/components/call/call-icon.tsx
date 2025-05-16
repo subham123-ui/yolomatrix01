@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Phone, X, Minimize, Maximize, Mic, MicOff, Video, VideoOff } from "lucide-react"
+import { Phone, X, Minimize, Maximize, Mic, MicOff, Video, VideoOff, PhoneOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
@@ -11,6 +11,7 @@ export default function CallIcon() {
   const [expanded, setExpanded] = useState<boolean>(false)
   const [micMuted, setMicMuted] = useState<boolean>(false)
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true)
+  const [isConnected, setIsConnected] = useState(false)
   
   const ws = useRef<WebSocket | null>(null)
   const peerConnection = useRef<RTCPeerConnection | null>(null)
@@ -20,69 +21,75 @@ export default function CallIcon() {
   const remoteVideo = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
+    const connectWebSocket = () => {
+      try {
+        const websocket = new WebSocket('ws://localhost:8080');
+        
+        websocket.onopen = () => {
+          console.log('Connected to WebSocket server');
+          setIsConnected(true);
+        };
+
+        websocket.onclose = () => {
+          console.log('Disconnected from WebSocket server');
+          setIsConnected(false);
+          // Attempt to reconnect after 5 seconds
+          setTimeout(connectWebSocket, 5000);
+        };
+
+        websocket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          setIsConnected(false);
+        };
+
+        ws.current = websocket;
+
+        return () => {
+          websocket.close();
+        };
+      } catch (error) {
+        console.error('Failed to connect to WebSocket:', error);
+        // Attempt to reconnect after 5 seconds
+        setTimeout(connectWebSocket, 5000);
+      }
+    };
+
+    connectWebSocket();
+  }, []);
+
+  useEffect(() => {
     // Generate a random user ID
     const newUserId = "user_" + Math.random().toString(36).substr(2, 9)
     setUserId(newUserId)
 
-    // Connect to WebSocket server
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080"
-    ws.current = new WebSocket(wsUrl)
+    if (ws.current) {
+      ws.current.onmessage = async (event: MessageEvent) => {
+        try {
+          const message = JSON.parse(event.data)
+          console.log("Received message:", message)
 
-    ws.current.onopen = () => {
-      console.log("Connected to WebSocket server")
-      // Register user with the server
-      if (ws.current) {
-        ws.current.send(JSON.stringify({ type: "register", userId: newUserId, role: "user" }))
-      }
-    }
-
-    ws.current.onmessage = async (event) => {
-      try {
-        const message = JSON.parse(event.data)
-        console.log("Received message:", message)
-
-        switch (message.type) {
-          case "callAccepted":
-            setCallStatus("connected")
-            setExpanded(true)
-            await handleCallAccepted(message)
-            break
-          case "ice-candidate":
-            handleIceCandidate(message)
-            break
-          case "offer":
-            handleOffer(message)
-            break
-          case "answer":
-            handleAnswer(message)
-            break
-          case "callEnded":
-            handleCallEnded()
-            break
+          switch (message.type) {
+            case "callAccepted":
+              setCallStatus("connected")
+              setExpanded(true)
+              await handleCallAccepted(message)
+              break
+            case "ice-candidate":
+              handleIceCandidate(message)
+              break
+            case "offer":
+              handleOffer(message)
+              break
+            case "answer":
+              handleAnswer(message)
+              break
+            case "callEnded":
+              handleCallEnded()
+              break
+          }
+        } catch (error) {
+          console.error("Error parsing WebSocket message:", error)
         }
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error)
-      }
-    }
-
-    ws.current.onclose = () => {
-      console.log("Disconnected from WebSocket server")
-    }
-
-    ws.current.onerror = (error) => {
-      console.error("WebSocket error:", error)
-    }
-
-    // Clean up on component unmount
-    return () => {
-      if (ws.current) {
-        ws.current.close()
-      }
-      if (localStream.current) {
-        localStream.current.getTracks().forEach((track) => track.stop())
-      }
-      if (peerConnection.current) {
-        peerConnection.current.close()
       }
     }
   }, [])
@@ -147,17 +154,15 @@ export default function CallIcon() {
     }
   }
 
-  const handleCallClick = async (e) => {
-    e.stopPropagation(); // Prevent event bubbling
+  const handleCallClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       setCallStatus("calling")
       setExpanded(true)
 
-      // Initialize WebRTC peer connection
       const pc = await initializePeerConnection()
       if (!pc || !ws.current) return
 
-      // Create and send offer
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
 
@@ -253,8 +258,8 @@ export default function CallIcon() {
     }
   }
 
-  const endCall = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
+  const endCall = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (ws.current) {
       ws.current.send(
         JSON.stringify({
@@ -264,12 +269,11 @@ export default function CallIcon() {
         }),
       )
     }
-
     handleCallEnded()
   }
 
-  const toggleMic = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
+  const toggleMic = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (localStream.current) {
       const audioTrack = localStream.current.getAudioTracks()[0]
       if (audioTrack) {
@@ -279,8 +283,8 @@ export default function CallIcon() {
     }
   }
 
-  const toggleVideo = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
+  const toggleVideo = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (localStream.current) {
       const videoTrack = localStream.current.getVideoTracks()[0]
       if (videoTrack) {
@@ -290,8 +294,8 @@ export default function CallIcon() {
     }
   }
 
-  const toggleExpanded = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
+  const toggleExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setExpanded(!expanded);
   }
 
@@ -304,7 +308,11 @@ export default function CallIcon() {
           className="fixed left-4 bottom-4 p-3 shadow-lg hover:shadow-xl transition-all duration-300 w-14 h-14 flex items-center justify-center cursor-pointer z-50" 
           onClick={toggleExpanded}
         >
-          <Phone size={24} className={`${callStatus !== "idle" ? "text-green-500" : ""}`} />
+          {isConnected ? (
+            <Phone size={24} className={`${callStatus !== "idle" ? "text-green-500" : ""}`} />
+          ) : (
+            <PhoneOff className="h-6 w-6 text-red-500" />
+          )}
           {callStatus === "calling" && <span className="absolute top-0 right-0 h-3 w-3 bg-amber-500 rounded-full animate-ping"></span>}
           {callStatus === "connected" && <span className="absolute top-0 right-0 h-3 w-3 bg-green-500 rounded-full"></span>}
         </Card>

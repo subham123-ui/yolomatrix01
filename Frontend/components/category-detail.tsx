@@ -620,7 +620,13 @@ export default function CategoryDetail({
                         mode="range"
                         defaultMonth={date.from}
                         selected={date}
-                        onSelect={setDate}
+                        onSelect={(range) => {
+                          if (range) {
+                            setDate({ from: range.from, to: range.to })
+                          } else {
+                            setDate({ from: undefined, to: undefined })
+                          }
+                        }}
                         numberOfMonths={2}
                       />
                     </PopoverContent>
