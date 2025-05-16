@@ -1,34 +1,44 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 type LanguageContextType = {
-  language: string
-  setLanguage: (lang: string) => void
-  t: (key: string) => string
-  getHeaderTexts: () => string[]
-  getButtonTexts: () => string[]
-}
+  language: string;
+  setLanguage: (lang: string) => void;
+  t: (key: string) => string;
+  getHeaderTexts: () => string[];
+  getButtonTexts: () => string[];
+};
 
 const defaultLanguageContext: LanguageContextType = {
   language: "en",
   setLanguage: () => {},
   t: (key: string) => key,
   getHeaderTexts: () => [],
-  getButtonTexts: () => []
-}
+  getButtonTexts: () => [],
+};
 
-const LanguageContext = createContext<LanguageContextType>(defaultLanguageContext)
+const LanguageContext = createContext<LanguageContextType>(
+  defaultLanguageContext
+);
 
-export const useLanguage = () => useContext(LanguageContext)
+export const useLanguage = () => useContext(LanguageContext);
 
 type LanguageProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export const translations = {
   en: {
     // Navbar
+
+    "signup.login": "Login",
     "nav.home": "Home",
     "nav.rentals": "Rentals",
     "nav.concierge": "Concierge",
@@ -36,8 +46,8 @@ export const translations = {
     "nav.contact": "Contact",
     "nav.login": "Login",
     "nav.signup": "Sign Up",
-    "language": "Language",
-    "back": "Back",
+    language: "Language",
+    back: "Back",
 
     // Hero
     "hero.title": "Your Gateway to Exclusive Experiences",
@@ -46,12 +56,12 @@ export const translations = {
     "hero.tagline": "Now featuring Exclusive Packages Services",
     "hero.explore": "Explore Now",
     "hero.book": "Book a Ride",
-    
+
     // Rotating Button Texts
     "hero.buttons": [
       "Start Your Luxury Journey",
       "Unlock Exclusive Experiences",
-      "Reserve Your Escape Now"
+      "Reserve Your Escape Now",
     ],
 
     // Search Form
@@ -124,8 +134,9 @@ export const translations = {
     "about.cta": "Ready to Experience Luxury?",
     "about.contact": "Contact Us Today",
 
-        "forgotPassword.title": "Forgot Password?",
-    "forgotPassword.description": "Enter your email address and we'll send you a link to reset your password.",
+    "forgotPassword.title": "Forgot Password?",
+    "forgotPassword.description":
+      "Enter your email address and we'll send you a link to reset your password.",
     "forgotPassword.email": "Email Address",
     "forgotPassword.emailPlaceholder": "Enter your email",
     "forgotPassword.resetButton": "Reset Password",
@@ -164,6 +175,7 @@ export const translations = {
     "login.forgotPassword": "Forgot Password?",
     "login.rememberMe": "Remember me",
     "login.signIn": "Sign In",
+    "login.signUp": "Register",
     "login.noAccount": "Don't have an account?",
     "login.createAccount": "Create Account",
     "login.orContinueWith": "Or continue with",
@@ -184,7 +196,8 @@ export const translations = {
     "signup.termsOfService": "Terms of Service",
     "signup.and": "and",
     "signup.privacyPolicy": "Privacy Policy",
-    "signup.agreeToMarketing": "I want to receive updates about products, services and promotional offers",
+    "signup.agreeToMarketing":
+      "I want to receive updates about products, services and promotional offers",
     "signup.alreadyHaveAccount": "Already have an account?",
     "signup.login": "Login",
     "signup.orContinueWith": "Or continue with",
@@ -196,6 +209,9 @@ export const translations = {
   },
   es: {
     // Navbar
+
+    "signup.login": "Login",
+    "login.signUp": "Register",
     "nav.home": "Inicio",
     "nav.rentals": "Alquileres",
     "nav.concierge": "Conserjería",
@@ -203,8 +219,8 @@ export const translations = {
     "nav.contact": "Contacto",
     "nav.login": "Iniciar Sesión",
     "nav.signup": "Registrarse",
-    "language": "Idioma",
-    "back": "Atrás",
+    language: "Idioma",
+    back: "Atrás",
 
     // Hero
     "hero.title": "Experimenta el Lujo, Vive Yolo",
@@ -213,7 +229,7 @@ export const translations = {
     "hero.tagline": "Ahora con Servicios Exclusivos de Conserjería",
     "hero.explore": "Explorar Ahora",
     "hero.book": "Reservar un Viaje",
-    
+
     // Rotating Header Texts
     "hero.headers": [
       "Experimenta el Lujo, Vive Yolo",
@@ -221,14 +237,14 @@ export const translations = {
       "Donde el Lujo Encuentra la Aventura",
       "Más Allá del Viaje—Experimenta lo Extraordinario",
       "Creando Escapadas Inolvidables",
-      "Tu Puerta de Entrada a Experiencias Exclusivas"
+      "Tu Puerta de Entrada a Experiencias Exclusivas",
     ],
-    
+
     // Rotating Button Texts
     "hero.buttons": [
       "Inicia Tu Viaje de Lujo",
       "Desbloquea Experiencias Exclusivas",
-      "Reserva Tu Escape Ahora"
+      "Reserva Tu Escape Ahora",
     ],
 
     // Search Form
@@ -274,7 +290,8 @@ export const translations = {
     "category.perWeek": "por semana",
     "category.bookNow": "Reservar Ahora",
     "category.viewMore": "Ver Más",
-    "category.noResults": "No se encontraron resultados. Intente con diferentes filtros.",
+    "category.noResults":
+      "No se encontraron resultados. Intente con diferentes filtros.",
 
     // Amenities
     "amenity.pool": "Piscina",
@@ -303,7 +320,8 @@ export const translations = {
 
     // Contact Page
     "contact.title": "Contáctanos",
-    "contact.subtitle": "Nuestro equipo de conserjería está disponible 24/7 para ayudarte",
+    "contact.subtitle":
+      "Nuestro equipo de conserjería está disponible 24/7 para ayudarte",
     "contact.form.title": "Envíanos un Mensaje",
     "contact.form.name": "Nombre Completo",
     "contact.form.email": "Correo Electrónico",
@@ -331,8 +349,6 @@ export const translations = {
     "login.createAccount": "Crear Cuenta",
     "login.orContinueWith": "O continuar con",
 
-    
-
     // Signup Page
     "signup.createAccount": "Crear Cuenta",
     "signup.firstName": "Nombre",
@@ -349,13 +365,15 @@ export const translations = {
     "signup.termsOfService": "Términos de Servicio",
     "signup.and": "y",
     "signup.privacyPolicy": "Política de Privacidad",
-    "signup.agreeToMarketing": "Quiero recibir actualizaciones sobre productos, servicios y ofertas promocionales",
+    "signup.agreeToMarketing":
+      "Quiero recibir actualizaciones sobre productos, servicios y ofertas promocionales",
     "signup.alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "signup.login": "Iniciar Sesión",
     "signup.orContinueWith": "O continuar con",
 
-       "forgotPassword.title": "¿Olvidaste tu contraseña?",
-    "forgotPassword.description": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "forgotPassword.title": "¿Olvidaste tu contraseña?",
+    "forgotPassword.description":
+      "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
     "forgotPassword.email": "Correo electrónico",
     "forgotPassword.emailPlaceholder": "Ingresa tu correo electrónico",
     "forgotPassword.resetButton": "Restablecer Contraseña",
@@ -365,52 +383,56 @@ export const translations = {
     "forgotPassword.needHelp": "¿Necesitas ayuda?",
     "forgotPassword.contactSupport": "Contacta a soporte",
     "forgotPassword.checkEmail": "Revisa Tu Correo",
-    "forgotPassword.emailSent": "Hemos enviado un enlace para restablecer tu contraseña a {email}",
+    "forgotPassword.emailSent":
+      "Hemos enviado un enlace para restablecer tu contraseña a {email}",
     "forgotPassword.tryDifferentEmail": "Intentar con otro correo",
-
 
     // Footer
     "footer.rights": "Todos los derechos reservados.",
     "footer.terms": "Términos de Servicio",
     "footer.privacy": "Privacidad",
   },
-}
+};
 
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
-  const [language, setLanguage] = useState("en")
-  const [mounted, setMounted] = useState(false)
+  const [language, setLanguage] = useState("en");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-    const savedLanguage = localStorage.getItem("language") || "en"
-    setLanguage(savedLanguage)
-  }, [])
+    setMounted(true);
+    const savedLanguage = localStorage.getItem("language") || "en";
+    setLanguage(savedLanguage);
+  }, []);
 
   useEffect(() => {
     if (mounted) {
-      localStorage.setItem("language", language)
-      document.documentElement.lang = language
+      localStorage.setItem("language", language);
+      document.documentElement.lang = language;
     }
-  }, [language, mounted])
+  }, [language, mounted]);
 
   const t = (key: string): string => {
-    const lang = translations[language as keyof typeof translations]
-    return lang && lang[key as keyof typeof lang] ? lang[key as keyof typeof lang] : key
-  }
+    const lang = translations[language as keyof typeof translations];
+    return lang && lang[key as keyof typeof lang]
+      ? lang[key as keyof typeof lang]
+      : key;
+  };
 
   const getHeaderTexts = (): string[] => {
-    const lang = translations[language as keyof typeof translations]
-    return lang && lang["hero.headers"] ? lang["hero.headers"] : []
-  }
+    const lang = translations[language as keyof typeof translations];
+    return lang && lang["hero.headers"] ? lang["hero.headers"] : [];
+  };
 
   const getButtonTexts = (): string[] => {
-    const lang = translations[language as keyof typeof translations]
-    return lang && lang["hero.buttons"] ? lang["hero.buttons"] : []
-  }
+    const lang = translations[language as keyof typeof translations];
+    return lang && lang["hero.buttons"] ? lang["hero.buttons"] : [];
+  };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, getHeaderTexts, getButtonTexts }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, t, getHeaderTexts, getButtonTexts }}
+    >
       {children}
     </LanguageContext.Provider>
-  )
-}
+  );
+};
