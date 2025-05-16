@@ -29,6 +29,7 @@ export const register_Controller = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+
     const createdUser = await User.create({
       name,
       email,
@@ -45,9 +46,14 @@ export const register_Controller = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, //! 30 days expire date
     });
 
+
+
+    createdUser.password = undefined
+
+
     res
       .status(200)
-      .json({ success: true, message: "Registration Successfully" });
+      .json({ success: true, message: "Registration Successfully", user_data: createdUser });
   } catch (error) {
     console.log("Register controller error: ", error);
 
@@ -97,7 +103,9 @@ export const login_adminController = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, //! 30 days expire date
     });
 
-    res.status(200).json({ success: true, message: "Login Successfully" });
+    userEmailMatch.password = undefined
+
+    res.status(200).json({ success: true, message: "Login Successfully", user_data: userEmailMatch });
   } catch (error) {
     //? Send a response with status 500 in case of error
     res.status(500).json({ success: false, message: error.message });
@@ -140,9 +148,16 @@ export const loginController = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, //! 30 days expire date
     });
 
-    res.status(200).json({ success: true, message: "Login Successfully" });
+
+
+
+    userEmailMatch.password = undefined
+
+
+    res.status(200).json({ success: true, message: "Login Successfully", user_data: userEmailMatch });
   } catch (error) {
     //? Send a response with status 500 in case of error
+    console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

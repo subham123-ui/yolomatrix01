@@ -33,14 +33,14 @@ export default function LoginPage() {
   const { t } = useLanguage()
   const router = useRouter()
   const { toast } = useToast()
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
-    
+
     try {
-      const response = await authAPI.login({ email, password })
+      const { data } = await authAPI.login({ email, password })
       
       // Handle successful login
       if (response?.data?.token) {
@@ -50,18 +50,18 @@ export default function LoginPage() {
         } else {
           sessionStorage.setItem("token", response.data.token)
         }
-        
+
         // Store user info if provided
         if (response.data.user) {
           localStorage.setItem("user", JSON.stringify(response.data.user))
         }
-        
+
         toast({
           title: t("login.successTitle"),
           description: t("login.successMessage"),
           variant: "success",
         })
-        
+
         // Redirect to dashboard or home page
         router.push("/dashboard")
       } else {
@@ -96,27 +96,27 @@ export default function LoginPage() {
           {t("")}
         </Button>
       </header>
-      
+
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <Logo className="w-[150px] h-auto" />
           </div>
-          
+
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8">
             {/* Title */}
             <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
               {t("login.welcome")}
             </h1>
-            
+
             {/* Error Message */}
             {error && (
               <Alert variant="destructive" className="mb-4">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            
+
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Field */}
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              
+
               {/* Password Field */}
               <div className="space-y-2">
                 <div className="flex justify-between">
@@ -171,26 +171,26 @@ export default function LoginPage() {
                   </button>
                 </div>
               </div>
-              
+
               {/* Remember Me Checkbox */}
               <div className="flex items-center">
                 <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="remember" 
+                  <Checkbox
+                    id="remember"
                     checked={rememberMe}
                     onCheckedChange={setRememberMe}
                     className="text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400"
                     disabled={isLoading}
                   />
-                  <Label 
-                    htmlFor="remember" 
+                  <Label
+                    htmlFor="remember"
                     className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer"
                   >
                     {t("login.rememberMe")}
                   </Label>
                 </div>
               </div>
-              
+
               {/* Login Button */}
               <Button
                 type="submit"
@@ -212,14 +212,14 @@ export default function LoginPage() {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
+                {/* <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
                     {t("login.orContinueWith")}
                   </span>
-                </div>
+                </div> */}
               </div>
 
-              {/* Google Login Button */}
+              {/* Google Login Button
               <Button
                 type="button"
                 variant="outline"
@@ -246,9 +246,9 @@ export default function LoginPage() {
                   />
                 </svg>
                 {t("login.continueWithGoogle")}
-              </Button>
+              </Button> */}
             </form>
-            
+
             {/* Sign Up Link */}
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
               {t("login.noAccount")}{" "}
